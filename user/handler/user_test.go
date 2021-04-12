@@ -10,7 +10,7 @@ func TestUser_Add(t *testing.T) {
 	u := NewUser()
 
 	req := &userPro.AddRequest{
-		UniqueId: "22",
+		UniqueId: "258",
 		Nickname: "hello",
 		Avatar:   "1.jpg",
 	}
@@ -28,7 +28,7 @@ func TestUser_Add(t *testing.T) {
 func TestUser_GetInfoByUserID(t *testing.T) {
 	u := NewUser()
 
-	req := &userPro.GetInfoByUserIdRequest{UserId:1}
+	req := &userPro.GetInfoByUserIdRequest{UserId:999999}
 
 	res := &userPro.GetInfoByUserIdResponse{}
 
@@ -43,7 +43,7 @@ func TestUser_GetInfoByUserID(t *testing.T) {
 func TestUser_GetInfoByUniqueId(t *testing.T) {
 	u := NewUser()
 
-	req := &userPro.GetInfoByUniqueIdRequest{UniqueId:"33333"}
+	req := &userPro.GetInfoByUniqueIdRequest{UniqueId:"258"}
 
 	res := &userPro.GetInfoByUniqueIdResponse{}
 
@@ -52,11 +52,11 @@ func TestUser_GetInfoByUniqueId(t *testing.T) {
 		t.Error(err)
 	}
 
-	t.Log(res)
+	t.Log(res.User)
 }
 
 func TestUser_GetListByUserId(t *testing.T) {
-	userIds := []int64{1, 4, 5}
+	userIds := []int64{1, 4, 999}
 
 	u := NewUser()
 
@@ -65,6 +65,25 @@ func TestUser_GetListByUserId(t *testing.T) {
 	res := &userPro.GetListByUserIdResponse{}
 
 	err := u.GetListByUserId(context.TODO(), req, res)
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log(res)
+}
+
+func TestUser_CreateToken(t *testing.T) {
+	var userId int64
+
+	userId = 999
+
+	u := NewUser()
+
+	req := &userPro.CreateTokenRequest{UserId:userId}
+
+	res := &userPro.CreateTokenResponse{}
+
+	err := u.CreateToken(context.TODO(), req, res)
 	if err != nil {
 		t.Error(err)
 	}

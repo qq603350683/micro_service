@@ -3,7 +3,7 @@ package repository
 import "user/domain/model"
 
 type IUserTokenRepository interface {
-	Add(userToken *model.UserToken) error
+	Add(*model.UserToken) error
 	GetInfoByToken(token string) (*model.UserToken, error)
 }
 

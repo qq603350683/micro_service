@@ -112,14 +112,6 @@ func (u *UserCache) GetInfoByUserId(userId int) (*model.User, error) {
 		return nil, err
 	}
 
-	if user == nil {
-		return nil, nil
-	}
-
-	if user.DeletedAt != nil {
-		return nil, nil
-	}
-
 	return user, nil
 }
 
@@ -129,6 +121,10 @@ func (u *UserCache) GetUserIdByUniqueID(uniqueID string) (int, error) {
 
 	userIdStr, err := RedisClient.HGet(key, uniqueID).Result()
 	if err != nil {
+		if err == redis.Nil {
+			return -1, nil
+		}
+
 		return 0, err
 	}
 

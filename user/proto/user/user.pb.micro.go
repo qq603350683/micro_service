@@ -46,6 +46,8 @@ type UserService interface {
 	GetInfoByUserId(ctx context.Context, in *GetInfoByUserIdRequest, opts ...client.CallOption) (*GetInfoByUserIdResponse, error)
 	GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, opts ...client.CallOption) (*GetListByUserIdResponse, error)
 	Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*AddResponse, error)
+	CreateToken(ctx context.Context, in *CreateTokenRequest, opts ...client.CallOption) (*CreateTokenResponse, error)
+	GetUserInfoByToken(ctx context.Context, in *GetUserInfoByTokenRequest, opts ...client.CallOption) (*GetUserInfoByTokenResponse, error)
 }
 
 type userService struct {
@@ -100,6 +102,26 @@ func (c *userService) Add(ctx context.Context, in *AddRequest, opts ...client.Ca
 	return out, nil
 }
 
+func (c *userService) CreateToken(ctx context.Context, in *CreateTokenRequest, opts ...client.CallOption) (*CreateTokenResponse, error) {
+	req := c.c.NewRequest(c.name, "User.CreateToken", in)
+	out := new(CreateTokenResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userService) GetUserInfoByToken(ctx context.Context, in *GetUserInfoByTokenRequest, opts ...client.CallOption) (*GetUserInfoByTokenResponse, error) {
+	req := c.c.NewRequest(c.name, "User.GetUserInfoByToken", in)
+	out := new(GetUserInfoByTokenResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
@@ -107,6 +129,8 @@ type UserHandler interface {
 	GetInfoByUserId(context.Context, *GetInfoByUserIdRequest, *GetInfoByUserIdResponse) error
 	GetListByUserId(context.Context, *GetListByUserIdRequest, *GetListByUserIdResponse) error
 	Add(context.Context, *AddRequest, *AddResponse) error
+	CreateToken(context.Context, *CreateTokenRequest, *CreateTokenResponse) error
+	GetUserInfoByToken(context.Context, *GetUserInfoByTokenRequest, *GetUserInfoByTokenResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
@@ -115,6 +139,8 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		GetInfoByUserId(ctx context.Context, in *GetInfoByUserIdRequest, out *GetInfoByUserIdResponse) error
 		GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, out *GetListByUserIdResponse) error
 		Add(ctx context.Context, in *AddRequest, out *AddResponse) error
+		CreateToken(ctx context.Context, in *CreateTokenRequest, out *CreateTokenResponse) error
+		GetUserInfoByToken(ctx context.Context, in *GetUserInfoByTokenRequest, out *GetUserInfoByTokenResponse) error
 	}
 	type User struct {
 		user
@@ -141,4 +167,12 @@ func (h *userHandler) GetListByUserId(ctx context.Context, in *GetListByUserIdRe
 
 func (h *userHandler) Add(ctx context.Context, in *AddRequest, out *AddResponse) error {
 	return h.UserHandler.Add(ctx, in, out)
+}
+
+func (h *userHandler) CreateToken(ctx context.Context, in *CreateTokenRequest, out *CreateTokenResponse) error {
+	return h.UserHandler.CreateToken(ctx, in, out)
+}
+
+func (h *userHandler) GetUserInfoByToken(ctx context.Context, in *GetUserInfoByTokenRequest, out *GetUserInfoByTokenResponse) error {
+	return h.UserHandler.GetUserInfoByToken(ctx, in, out)
 }

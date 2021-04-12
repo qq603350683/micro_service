@@ -5,8 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/domain/cache/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/cache/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/domain/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/model/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/repository/user_token.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/user_token.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handler/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handler/user_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proto/user/user.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/user/user.pb.go" afterDir="false" />
@@ -17,6 +16,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" path="D:\Golang" />
   <component name="Git.Settings">
@@ -33,6 +39,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -45,8 +52,30 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="go.vgo" />
   </component>
-  <component name="RunManager" selected="Go Test.TestUser_GetInfoByUserID in user/handler (1)">
-    <configuration name="TestUser_GetInfoByUniqueId in user/handler" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Test.TestUser_CreateToken in user/handler">
+    <configuration name="TestUser_Add in user/handler" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="user" />
+      <working_directory value="$PROJECT_DIR$/handler" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="user/handler" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestUser_Add$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestUser_CreateToken in user/handler" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="user" />
+      <working_directory value="$PROJECT_DIR$/handler" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="user/handler" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestUser_CreateToken$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestUser_GetInfoByUniqueId in user/handler (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="user" />
       <working_directory value="$PROJECT_DIR$/handler" />
       <framework value="gotest" />
@@ -68,18 +97,7 @@
       <pattern value="^TestUser_GetInfoByUserID$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestUser_GetInfoByUserID in user/handler" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="user" />
-      <working_directory value="$PROJECT_DIR$/handler" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="user/handler" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestUser_GetInfoByUserID$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestUser_GetListByUserId in user/handler" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestUser_GetListByUserId in user/handler (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="user" />
       <working_directory value="$PROJECT_DIR$/handler" />
       <framework value="gotest" />
@@ -92,10 +110,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestUser_CreateToken in user/handler" />
+        <item itemvalue="Go Test.TestUser_GetListByUserId in user/handler (1)" />
+        <item itemvalue="Go Test.TestUser_GetInfoByUniqueId in user/handler (1)" />
+        <item itemvalue="Go Test.TestUser_Add in user/handler" />
         <item itemvalue="Go Test.TestUser_GetInfoByUserID in user/handler (1)" />
-        <item itemvalue="Go Test.TestUser_GetInfoByUserID in user/handler" />
-        <item itemvalue="Go Test.TestUser_GetListByUserId in user/handler" />
-        <item itemvalue="Go Test.TestUser_GetInfoByUniqueId in user/handler" />
       </list>
     </recent_temporary>
   </component>
@@ -123,22 +142,38 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="180" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1618226896123" />
-    <state width="1876" height="277" key="GridCell.Tab.0.bottom" timestamp="1618231663237">
+    <state width="1876" height="342" key="GridCell.Tab.0.bottom" timestamp="1618238204596">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="277" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618231663237" />
-    <state width="1876" height="277" key="GridCell.Tab.0.center" timestamp="1618231663237">
+    <state width="1876" height="342" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618238204596" />
+    <state width="1876" height="342" key="GridCell.Tab.0.center" timestamp="1618238204596">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="277" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618231663237" />
-    <state width="1876" height="277" key="GridCell.Tab.0.left" timestamp="1618231663237">
+    <state width="1876" height="342" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618238204596" />
+    <state width="1876" height="342" key="GridCell.Tab.0.left" timestamp="1618238204596">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="277" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618231663237" />
-    <state width="1876" height="277" key="GridCell.Tab.0.right" timestamp="1618231663237">
+    <state width="1876" height="342" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618238204596" />
+    <state width="1876" height="342" key="GridCell.Tab.0.right" timestamp="1618238204596">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="277" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618231663237" />
+    <state width="1876" height="342" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618238204596" />
+    <state width="1876" height="342" key="GridCell.Tab.1.bottom" timestamp="1618238204596">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1876" height="342" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618238204596" />
+    <state width="1876" height="342" key="GridCell.Tab.1.center" timestamp="1618238204596">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1876" height="342" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618238204596" />
+    <state width="1876" height="342" key="GridCell.Tab.1.left" timestamp="1618238204596">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1876" height="342" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618238204596" />
+    <state width="1876" height="342" key="GridCell.Tab.1.right" timestamp="1618238204596">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1876" height="342" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618238204596" />
     <state x="463" y="151" key="SettingsEditor" timestamp="1618226851422">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

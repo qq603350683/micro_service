@@ -8,6 +8,8 @@ service User {
 	rpc GetInfoByUserId(GetInfoByUserIdRequest) returns (GetInfoByUserIdResponse) {}
 	rpc GetListByUserId(GetListByUserIdRequest) returns (GetListByUserIdResponse) {}
 	rpc Add(AddRequest) returns (AddResponse) {}
+	rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {}
+	rpc GetUserInfoByToken(GetUserInfoByTokenRequest) returns (GetUserInfoByTokenResponse) {}
 }
 
 message BaseUser {
@@ -41,7 +43,6 @@ message GetInfoByUserIdResponse {
 
 message GetListByUserIdRequest {
     repeated int64 user_ids = 1;
-//    string user_ids = 1;
 }
 
 message GetListByUserIdResponse {
@@ -56,5 +57,22 @@ message AddRequest {
 
 message AddResponse {
     int64 user_id = 1;
+}
+
+message CreateTokenRequest {
+    int64 user_id = 1;
+}
+
+message CreateTokenResponse {
+    string token = 2;
+    string expired_at = 3;
+}
+
+message GetUserInfoByTokenRequest {
+    string token = 1;
+}
+
+message GetUserInfoByTokenResponse {
+    UserInfo user = 1;
 }
 
