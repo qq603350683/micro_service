@@ -38,7 +38,7 @@ func (u *UserCache) Add(userId int, user *model.User) (bool, error) {
 	if user == nil || user.DeletedAt != nil {
 		// 这里是空值缓存，主要用来防止缓存穿透
 
-		_, err = RedisClient.HMSet(key, model.NewUserByuserId(userId).ToEmptyCache()).Result()
+		_, err = RedisClient.HMSet(key, model.NewUserByUserId(userId).ToEmptyCache()).Result()
 		if err != nil {
 			return false, err
 		}
@@ -71,7 +71,7 @@ func (u *UserCache) Delete(userId int) (bool, error) {
 
 	key := UserInfoKey(userId)
 
-	_, err = RedisClient.HMSet(key, model.NewUserByuserId(userId).ToEmptyCache()).Result()
+	_, err = RedisClient.HMSet(key, model.NewUserByUserId(userId).ToEmptyCache()).Result()
 	if err != nil {
 		return false, err
 	}
@@ -101,6 +101,10 @@ func (u *UserCache) GetInfoByUserId(userId int) (*model.User, error) {
 		} else {
 			return nil, err
 		}
+	}
+
+	if len(result) == 0 {
+		return nil, nil
 	}
 
 	err = common.MapToStruct(result, &user)

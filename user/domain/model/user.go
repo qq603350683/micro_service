@@ -19,7 +19,7 @@ func NewUser() *User {
 	return new(User)
 }
 
-func NewUserByuserId(userId int)  *User {
+func NewUserByUserId(userId int)  *User {
 	user := new(User)
 	user.UserId = userId
 

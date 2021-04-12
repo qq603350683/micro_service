@@ -167,6 +167,21 @@ func (e *User) GetInfoByUniqueId(ctx context.Context, req *userProto.GetInfoByUn
 	return nil
 }
 
+// 根据user_id
+func (e *User) GetListByUserId(ctx context.Context, req *userProto.GetListByUserIdRequest, res *userProto.GetListByUserIdResponse) error {
+	if len(req.UserIds) == 0 {
+		return nil
+	}
+
+	var userIds []int
+
+	for _, userId := range(req.UserIds) {
+		userIds = append(userIds, int(userId))
+	}
+
+	return nil
+}
+
 // Call is a single request handler called via client.Call or the generated client code
 //func (e *User) Call(ctx context.Context, req *user.Request, rsp *user.Response) error {
 //	log.Log("Received User.Call request")

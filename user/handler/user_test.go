@@ -28,11 +28,43 @@ func TestUser_Add(t *testing.T) {
 func TestUser_GetInfoByUserID(t *testing.T) {
 	u := NewUser()
 
-	req := &userPro.GetInfoByUserIDRequest{UserId:1}
+	req := &userPro.GetInfoByUserIdRequest{UserId:1}
 
-	res := &userPro.GetInfoByUserIDResponse{}
+	res := &userPro.GetInfoByUserIdResponse{}
 
-	err := u.GetInfoByUserID(context.TODO(), req, res)
+	err := u.GetInfoByUserId(context.TODO(), req, res)
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log(res)
+}
+
+func TestUser_GetInfoByUniqueId(t *testing.T) {
+	u := NewUser()
+
+	req := &userPro.GetInfoByUniqueIdRequest{UniqueId:"33333"}
+
+	res := &userPro.GetInfoByUniqueIdResponse{}
+
+	err := u.GetInfoByUniqueId(context.TODO(), req, res)
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log(res)
+}
+
+func TestUser_GetListByUserId(t *testing.T) {
+	userIds := []int64{1, 4, 5}
+
+	u := NewUser()
+
+	req := &userPro.GetListByUserIdRequest{UserIds:userIds}
+
+	res := &userPro.GetListByUserIdResponse{}
+
+	err := u.GetListByUserId(context.TODO(), req, res)
 	if err != nil {
 		t.Error(err)
 	}
