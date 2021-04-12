@@ -5,8 +5,8 @@ option go_package = "./;go_micro_service_user";
 
 service User {
 	rpc GetInfoByUniqueId(GetInfoByUniqueIdRequest) returns (GetInfoByUniqueIdResponse) {}
-	rpc GetInfoByUserID(GetInfoByUserIDRequest) returns (GetInfoByUserIDResponse) {}
-	rpc GetListByUserID(GetListByUserIDRequest) returns (GetListByUserIDResponse) {}
+	rpc GetInfoByUserId(GetInfoByUserIdRequest) returns (GetInfoByUserIdResponse) {}
+	rpc GetListByUserId(GetListByUserIdRequest) returns (GetListByUserIdResponse) {}
 	rpc Add(AddRequest) returns (AddResponse) {}
 }
 
@@ -31,19 +31,19 @@ message GetInfoByUniqueIdResponse {
     UserInfo user = 1;
 }
 
-message GetInfoByUserIDRequest {
+message GetInfoByUserIdRequest {
     int64 user_id = 1;
 }
 
-message GetInfoByUserIDResponse {
+message GetInfoByUserIdResponse {
     UserInfo user = 1;
 }
 
-message GetListByUserIDRequest {
+message GetListByUserIdRequest {
     string user_ids = 1;
 }
 
-message GetListByUserIDResponse {
+message GetListByUserIdResponse {
     repeated BaseUser users = 1;
 }
 

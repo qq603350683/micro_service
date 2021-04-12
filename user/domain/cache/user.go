@@ -14,7 +14,8 @@ type IUserCache interface {
 	Update(userId int, user *model.User) (bool, error)
 	Delete(userId int) (bool, error)
 	GetInfoByUserId(userId int) (*model.User, error)
-	GetInfoByUniqueID(uniqueID string) (*model.User, error)
+	// GetInfoByUniqueID(uniqueID string) (*model.User, error)
+	GetUserIdByUniqueID(uniqueID string) (int, error)
 	AddUniqueID(uniqueID string, userId int) (bool, error)
 	CheckUniqueIDIsExists(uniqueID string) (bool, error)
 	GetListByUserId(userIds []int) ([]model.User, error)
@@ -118,28 +119,44 @@ func (u *UserCache) GetInfoByUserId(userId int) (*model.User, error) {
 	return user, nil
 }
 
-// 根据openid获取详情
-func (u *UserCache) GetInfoByUniqueID(uniqueID string) (*model.User, error) {
+// 根据 unique_id 获取 user_id, 当 user_id 为 -1 代表当前 unique_id 不在缓存里
+func (u *UserCache) GetUserIdByUniqueID(uniqueID string) (int, error) {
 	key := UserUniqueIDListKey()
 
-	str, err := RedisClient.HGet(key, uniqueID).Result()
-	if err != nil && err != redis.Nil {
-		return nil, err
-	}
-
-	if str == "" {
-		return nil, nil
-	}
-
-	userId, err := strconv.Atoi(str)
+	userIdStr, err := RedisClient.HGet(key, uniqueID).Result()
 	if err != nil {
-		return nil, nil
+		return 0, err
 	}
 
-	user, err := u.GetInfoByUserId(userId)
+	if userIdStr == "" {
+		return -1, nil
+	}
 
-	return user, err
+	return strconv.Atoi(userIdStr)
 }
+
+// 根据 unique_id 获取详情
+//func (u *UserCache) GetInfoByUniqueID(uniqueID string) (*model.User, error) {
+//	key := UserUniqueIDListKey()
+//
+//	str, err := RedisClient.HGet(key, uniqueID).Result()
+//	if err != nil && err != redis.Nil {
+//		return nil, err
+//	}
+//
+//	if str == "" {
+//		return nil, nil
+//	}
+//
+//	userId, err := strconv.Atoi(str)
+//	if err != nil {
+//		return nil, nil
+//	}
+//
+//	user, err := u.GetInfoByUserId(userId)
+//
+//	return user, err
+//}
 
 // 把openid添加到数组
 func (u *UserCache) AddUniqueID(uniqueID string, userId int) (bool, error) {

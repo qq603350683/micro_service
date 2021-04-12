@@ -11,9 +11,8 @@ import (
 
 import (
 	context "context"
-	api "github.com/micro/go-micro/v2/api"
-	client "github.com/micro/go-micro/v2/client"
-	server "github.com/micro/go-micro/v2/server"
+	client "github.com/micro/go-micro/client"
+	server "github.com/micro/go-micro/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -28,23 +27,16 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ api.Endpoint
 var _ context.Context
 var _ client.Option
 var _ server.Option
-
-// Api Endpoints for User service
-
-func NewUserEndpoints() []*api.Endpoint {
-	return []*api.Endpoint{}
-}
 
 // Client API for User service
 
 type UserService interface {
 	GetInfoByUniqueId(ctx context.Context, in *GetInfoByUniqueIdRequest, opts ...client.CallOption) (*GetInfoByUniqueIdResponse, error)
-	GetInfoByUserID(ctx context.Context, in *GetInfoByUserIDRequest, opts ...client.CallOption) (*GetInfoByUserIDResponse, error)
-	GetListByUserID(ctx context.Context, in *GetListByUserIDRequest, opts ...client.CallOption) (*GetListByUserIDResponse, error)
+	GetInfoByUserId(ctx context.Context, in *GetInfoByUserIdRequest, opts ...client.CallOption) (*GetInfoByUserIdResponse, error)
+	GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, opts ...client.CallOption) (*GetListByUserIdResponse, error)
 	Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*AddResponse, error)
 }
 
@@ -54,6 +46,12 @@ type userService struct {
 }
 
 func NewUserService(name string, c client.Client) UserService {
+	if c == nil {
+		c = client.NewClient()
+	}
+	if len(name) == 0 {
+		name = "user"
+	}
 	return &userService{
 		c:    c,
 		name: name,
@@ -70,9 +68,9 @@ func (c *userService) GetInfoByUniqueId(ctx context.Context, in *GetInfoByUnique
 	return out, nil
 }
 
-func (c *userService) GetInfoByUserID(ctx context.Context, in *GetInfoByUserIDRequest, opts ...client.CallOption) (*GetInfoByUserIDResponse, error) {
-	req := c.c.NewRequest(c.name, "User.GetInfoByUserID", in)
-	out := new(GetInfoByUserIDResponse)
+func (c *userService) GetInfoByUserId(ctx context.Context, in *GetInfoByUserIdRequest, opts ...client.CallOption) (*GetInfoByUserIdResponse, error) {
+	req := c.c.NewRequest(c.name, "User.GetInfoByUserId", in)
+	out := new(GetInfoByUserIdResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -80,9 +78,9 @@ func (c *userService) GetInfoByUserID(ctx context.Context, in *GetInfoByUserIDRe
 	return out, nil
 }
 
-func (c *userService) GetListByUserID(ctx context.Context, in *GetListByUserIDRequest, opts ...client.CallOption) (*GetListByUserIDResponse, error) {
-	req := c.c.NewRequest(c.name, "User.GetListByUserID", in)
-	out := new(GetListByUserIDResponse)
+func (c *userService) GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, opts ...client.CallOption) (*GetListByUserIdResponse, error) {
+	req := c.c.NewRequest(c.name, "User.GetListByUserId", in)
+	out := new(GetListByUserIdResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -104,16 +102,16 @@ func (c *userService) Add(ctx context.Context, in *AddRequest, opts ...client.Ca
 
 type UserHandler interface {
 	GetInfoByUniqueId(context.Context, *GetInfoByUniqueIdRequest, *GetInfoByUniqueIdResponse) error
-	GetInfoByUserID(context.Context, *GetInfoByUserIDRequest, *GetInfoByUserIDResponse) error
-	GetListByUserID(context.Context, *GetListByUserIDRequest, *GetListByUserIDResponse) error
+	GetInfoByUserId(context.Context, *GetInfoByUserIdRequest, *GetInfoByUserIdResponse) error
+	GetListByUserId(context.Context, *GetListByUserIdRequest, *GetListByUserIdResponse) error
 	Add(context.Context, *AddRequest, *AddResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
 	type user interface {
 		GetInfoByUniqueId(ctx context.Context, in *GetInfoByUniqueIdRequest, out *GetInfoByUniqueIdResponse) error
-		GetInfoByUserID(ctx context.Context, in *GetInfoByUserIDRequest, out *GetInfoByUserIDResponse) error
-		GetListByUserID(ctx context.Context, in *GetListByUserIDRequest, out *GetListByUserIDResponse) error
+		GetInfoByUserId(ctx context.Context, in *GetInfoByUserIdRequest, out *GetInfoByUserIdResponse) error
+		GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, out *GetListByUserIdResponse) error
 		Add(ctx context.Context, in *AddRequest, out *AddResponse) error
 	}
 	type User struct {
@@ -131,12 +129,12 @@ func (h *userHandler) GetInfoByUniqueId(ctx context.Context, in *GetInfoByUnique
 	return h.UserHandler.GetInfoByUniqueId(ctx, in, out)
 }
 
-func (h *userHandler) GetInfoByUserID(ctx context.Context, in *GetInfoByUserIDRequest, out *GetInfoByUserIDResponse) error {
-	return h.UserHandler.GetInfoByUserID(ctx, in, out)
+func (h *userHandler) GetInfoByUserId(ctx context.Context, in *GetInfoByUserIdRequest, out *GetInfoByUserIdResponse) error {
+	return h.UserHandler.GetInfoByUserId(ctx, in, out)
 }
 
-func (h *userHandler) GetListByUserID(ctx context.Context, in *GetListByUserIDRequest, out *GetListByUserIDResponse) error {
-	return h.UserHandler.GetListByUserID(ctx, in, out)
+func (h *userHandler) GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, out *GetListByUserIdResponse) error {
+	return h.UserHandler.GetListByUserId(ctx, in, out)
 }
 
 func (h *userHandler) Add(ctx context.Context, in *AddRequest, out *AddResponse) error {

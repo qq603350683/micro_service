@@ -13,18 +13,19 @@ import (
 )
 
 type User struct{
-	DBService repository.IUserRepository
-	CacheService cache.IUserCache
+	DBUserService repository.IUserRepository
+	CacheUserService cache.IUserCache
 }
 
 func NewUser() *User {
 	u := new(User)
-	u.DBService = repository.NewUserRepository()
-	u.CacheService = cache.NewUserCache()
+	u.DBUserService = repository.NewUserRepository()
+	u.CacheUserService = cache.NewUserCache()
 
 	return u
 }
 
+// 添加用户详情
 func (e *User) Add(ctx context.Context, req *userProto.AddRequest, res *userProto.AddResponse) error {
 	var err error
 
@@ -33,7 +34,7 @@ func (e *User) Add(ctx context.Context, req *userProto.AddRequest, res *userProt
 	}
 
 	// 判断 req.UniqueId 是否已被注册
-	ok, err := e.CacheService.CheckUniqueIDIsExists(req.UniqueId)
+	ok, err := e.CacheUserService.CheckUniqueIDIsExists(req.UniqueId)
 	if err != nil {
 		return err
 	}
@@ -45,12 +46,12 @@ func (e *User) Add(ctx context.Context, req *userProto.AddRequest, res *userProt
 	user := model.NewUser()
 	user.UniqueID = req.UniqueId
 
-	err = e.DBService.Add(user)
+	err = e.DBUserService.Add(user)
 	if err != nil {
 		return err
 	}
 
-	ok, err = e.CacheService.AddUniqueID(req.UniqueId, user.UserId)
+	ok, err = e.CacheUserService.AddUniqueID(req.UniqueId, user.UserId)
 	if err != nil {
 		return err
 	}
@@ -64,7 +65,8 @@ func (e *User) Add(ctx context.Context, req *userProto.AddRequest, res *userProt
 	return nil
 }
 
-func (e *User) GetInfoByUserID(ctx context.Context, req *userProto.GetInfoByUserIDRequest, res *userProto.GetInfoByUserIDResponse) error {
+// 根据用户ID获取用户详情
+func (e *User) GetInfoByUserId(ctx context.Context, req *userProto.GetInfoByUserIdRequest, res *userProto.GetInfoByUserIdResponse) error {
 	var err error
 	var user *model.User
 
@@ -75,7 +77,7 @@ func (e *User) GetInfoByUserID(ctx context.Context, req *userProto.GetInfoByUser
 	userId := int(req.UserId)
 
 	// 1、先从缓存中获取
-	user, err = e.CacheService.GetInfoByUserId(userId)
+	user, err = e.CacheUserService.GetInfoByUserId(userId)
 	if err != nil {
 		return err
 	}
@@ -86,12 +88,12 @@ func (e *User) GetInfoByUserID(ctx context.Context, req *userProto.GetInfoByUser
 		key := cache.UserInfoLockKey(userId)
 		ok, val := cache.Lock(key)
 		if ok == true {
-			user, err = e.DBService.GetInfoByUserId(userId, "")
+			user, err = e.DBUserService.GetInfoByUserId(userId, "")
 			if err != nil {
 				return nil
 			}
 
-			ok, err = e.CacheService.Add(userId, user)
+			ok, err = e.CacheUserService.Add(userId, user)
 			if err != nil {
 				return err
 			}
@@ -104,7 +106,7 @@ func (e *User) GetInfoByUserID(ctx context.Context, req *userProto.GetInfoByUser
 		} else {
 			// 2.1 睡眠一下再获取
 			time.Sleep(time.Second / 5)
-			user, err = e.CacheService.GetInfoByUserId(userId)
+			user, err = e.CacheUserService.GetInfoByUserId(userId)
 			if err != nil {
 				return err
 			}
@@ -119,6 +121,47 @@ func (e *User) GetInfoByUserID(ctx context.Context, req *userProto.GetInfoByUser
 			Nickname: user.Nickname,
 			Avatar:   user.Avatar,
 		}
+	}
+
+	return nil
+}
+
+// 根据用户unique_id获取用户详情
+func (e *User) GetInfoByUniqueId(ctx context.Context, req *userProto.GetInfoByUniqueIdRequest, res *userProto.GetInfoByUniqueIdResponse) error {
+	var ok bool
+	var err error
+	var userId int
+
+	if req.UniqueId == "" {
+		return errors.New("unique_id cannot be empty")
+	}
+
+	// 1、获取 unique_id 对应的 user_id
+	userId, err = e.CacheUserService.GetUserIdByUniqueID(req.UniqueId)
+	if err != nil {
+		return nil
+	}
+
+	if userId == -1 {
+		// 这里返回-1是因为缓存key的field返回空值，为了避免缓存穿透做一层缓存
+		ok, err = e.CacheUserService.AddUniqueID(req.UniqueId, 0)
+		if err != nil {
+			return err
+		}
+
+		if !ok {
+			return errors.New("user.unique_id cannot write in cache")
+		}
+	} else if (userId > 0) {
+		req1 := &userProto.GetInfoByUserIdRequest{UserId:int64(userId)}
+		res2 := &userProto.GetInfoByUserIdResponse{}
+
+		err = e.GetInfoByUserId(ctx, req1, res2)
+		if err != nil {
+			return nil
+		}
+
+		res.User = res2.User
 	}
 
 	return nil
