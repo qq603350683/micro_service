@@ -1,0 +1,59 @@
+// protoc --go_out=./proto/user/ --micro_out=./proto/user ./proto/user/user.proto
+syntax = "proto3";
+
+option go_package = "./;go_micro_service_user";
+
+service User {
+	rpc GetInfoByUniqueId(GetInfoByUniqueIdRequest) returns (GetInfoByUniqueIdResponse) {}
+	rpc GetInfoByUserID(GetInfoByUserIDRequest) returns (GetInfoByUserIDResponse) {}
+	rpc GetListByUserID(GetListByUserIDRequest) returns (GetListByUserIDResponse) {}
+	rpc Add(AddRequest) returns (AddResponse) {}
+}
+
+message BaseUser {
+    int64 user_id = 1;
+    string nickname = 2;
+    string avatar = 3;
+}
+
+message UserInfo {
+    int64 user_id = 1;
+    string unique_id = 2;
+    string nickname = 3;
+    string avatar = 4;
+}
+
+message GetInfoByUniqueIdRequest {
+    string unique_id = 1;
+}
+
+message GetInfoByUniqueIdResponse {
+    UserInfo user = 1;
+}
+
+message GetInfoByUserIDRequest {
+    int64 user_id = 1;
+}
+
+message GetInfoByUserIDResponse {
+    UserInfo user = 1;
+}
+
+message GetListByUserIDRequest {
+    string user_ids = 1;
+}
+
+message GetListByUserIDResponse {
+    repeated BaseUser users = 1;
+}
+
+message AddRequest {
+    string unique_id = 1;
+    string nickname = 2;
+    string avatar = 3;
+}
+
+message AddResponse {
+    int64 user_id = 1;
+}
+
