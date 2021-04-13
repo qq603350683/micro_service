@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6a3600b-fa03-4322-9325-d11cc0847141" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitattributes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/cache/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/cache/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/model/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/repository/user_token.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/user_token.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/service/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/service/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proto/user/user.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/user/user.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proto/user/user.pb.micro.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/user/user.pb.micro.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proto/user/user.proto" beforeDir="false" afterPath="$PROJECT_DIR$/proto/user/user.proto" afterDir="false" />
@@ -24,7 +21,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="D:\Golang" />
+  <component name="GOROOT" path="G:\Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -138,10 +135,10 @@
     <proxy>off</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state x="552" y="180" key="#GOROOT" timestamp="1618226896123">
+    <state x="552" y="180" key="#GOROOT" timestamp="1618281840558">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="180" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1618226896123" />
+    <state x="552" y="180" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1618281840558" />
     <state width="1876" height="342" key="GridCell.Tab.0.bottom" timestamp="1618238204596">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

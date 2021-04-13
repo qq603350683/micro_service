@@ -173,7 +173,7 @@ func (e *UserService) GetListByUserId(userIds []int) ([]model.User, error) {
 
 	cacheUsers, err = e.Cache.GetListByUserId(userIds)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	if len(cacheUsers) == 0 {

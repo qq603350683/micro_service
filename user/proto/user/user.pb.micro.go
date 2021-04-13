@@ -11,9 +11,8 @@ import (
 
 import (
 	context "context"
-	api "github.com/micro/go-micro/v2/api"
-	client "github.com/micro/go-micro/v2/client"
-	server "github.com/micro/go-micro/v2/server"
+	client "github.com/micro/go-micro/client"
+	server "github.com/micro/go-micro/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -28,25 +27,24 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ api.Endpoint
 var _ context.Context
 var _ client.Option
 var _ server.Option
 
-// Api Endpoints for User service
-
-func NewUserEndpoints() []*api.Endpoint {
-	return []*api.Endpoint{}
-}
-
 // Client API for User service
 
 type UserService interface {
+	// 根据 unique_id 获取用户详情
 	GetInfoByUniqueId(ctx context.Context, in *GetInfoByUniqueIdRequest, opts ...client.CallOption) (*GetInfoByUniqueIdResponse, error)
+	// 根据 user_id 获取用户详情
 	GetInfoByUserId(ctx context.Context, in *GetInfoByUserIdRequest, opts ...client.CallOption) (*GetInfoByUserIdResponse, error)
+	// 批量获取用户信息
 	GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, opts ...client.CallOption) (*GetListByUserIdResponse, error)
+	// 新增用户
 	Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*AddResponse, error)
+	// 获取用户token令牌
 	CreateToken(ctx context.Context, in *CreateTokenRequest, opts ...client.CallOption) (*CreateTokenResponse, error)
+	// 根据 token 获取用户详情
 	GetUserInfoByToken(ctx context.Context, in *GetUserInfoByTokenRequest, opts ...client.CallOption) (*GetUserInfoByTokenResponse, error)
 }
 
@@ -56,6 +54,12 @@ type userService struct {
 }
 
 func NewUserService(name string, c client.Client) UserService {
+	if c == nil {
+		c = client.NewClient()
+	}
+	if len(name) == 0 {
+		name = "user"
+	}
 	return &userService{
 		c:    c,
 		name: name,
@@ -125,11 +129,17 @@ func (c *userService) GetUserInfoByToken(ctx context.Context, in *GetUserInfoByT
 // Server API for User service
 
 type UserHandler interface {
+	// 根据 unique_id 获取用户详情
 	GetInfoByUniqueId(context.Context, *GetInfoByUniqueIdRequest, *GetInfoByUniqueIdResponse) error
+	// 根据 user_id 获取用户详情
 	GetInfoByUserId(context.Context, *GetInfoByUserIdRequest, *GetInfoByUserIdResponse) error
+	// 批量获取用户信息
 	GetListByUserId(context.Context, *GetListByUserIdRequest, *GetListByUserIdResponse) error
+	// 新增用户
 	Add(context.Context, *AddRequest, *AddResponse) error
+	// 获取用户token令牌
 	CreateToken(context.Context, *CreateTokenRequest, *CreateTokenResponse) error
+	// 根据 token 获取用户详情
 	GetUserInfoByToken(context.Context, *GetUserInfoByTokenRequest, *GetUserInfoByTokenResponse) error
 }
 
