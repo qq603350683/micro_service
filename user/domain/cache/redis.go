@@ -5,18 +5,19 @@ import (
 	"math/rand"
 	"strconv"
 	"time"
+	"user/domain/config"
 )
 
 var RedisClient *redis.Client
 
-func InitRedis() {
+func InitRedis(config *config.RedisConfig) {
 	// go-redis 配置所有参数详细说明 https://blog.csdn.net/pengpengzhou/article/details/105385666
 	var opts redis.Options
 
-	opts.PoolSize = 10
-	opts.Addr = "127.0.0.1:6379"
-	opts.Password = ""
-	opts.DB = 0
+	opts.PoolSize = config.PoolSize
+	opts.Addr = config.Addr
+	opts.Password = config.Password
+	opts.DB = config.DB
 
 	RedisClient = redis.NewClient(&opts)
 }
