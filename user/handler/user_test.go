@@ -75,7 +75,7 @@ func TestUser_GetListByUserId(t *testing.T) {
 func TestUser_CreateToken(t *testing.T) {
 	var userId int64
 
-	userId = 999
+	userId = 1
 
 	u := NewUser()
 
@@ -84,6 +84,21 @@ func TestUser_CreateToken(t *testing.T) {
 	res := &userPro.CreateTokenResponse{}
 
 	err := u.CreateToken(context.TODO(), req, res)
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log(res)
+}
+
+func TestUser_GetUserInfoByToken(t *testing.T) {
+	u := NewUser()
+
+	req := &userPro.GetUserInfoByTokenRequest{Token:"kkxvNvxesDfsmWHhKrWakGbPkSxoaZpjrcIoxwIoiqnDBZLfNSXPJiQMbbMTWgCbcFrYFcmTWCNkUBrWfdkIpRgDNPvEA_zpQkrWadTqZapZEXlzkYLhsvievUzipajpoQBcSJqHgKtmtVZn_q"}
+
+	res := &userPro.GetUserInfoByTokenResponse{}
+
+	err := u.GetUserInfoByToken(context.TODO(), req, res)
 	if err != nil {
 		t.Error(err)
 	}

@@ -24,6 +24,7 @@ require github.com/uber/jaeger-client-go v2.25.0+incompatible // indirect
 
 require (
 	github.com/golang/protobuf v1.4.0
+	github.com/micro/go-micro v1.18.0
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
 	// github.com/prometheus/common v0.6.0
 	// github.com/joho/godotenv v1.3.0 // indirect

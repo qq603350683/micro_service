@@ -160,3 +160,35 @@ func (e *User) CreateToken(ctx context.Context, req *userProto.CreateTokenReques
 
 	return nil
 }
+
+// 根据token获取用户详情
+func (e *User) GetUserInfoByToken(ctx context.Context, req *userProto.GetUserInfoByTokenRequest, res *userProto.GetUserInfoByTokenResponse) error {
+	var err error
+
+	if req.Token == "" {
+		return errors.New("token cannot be empty")
+	}
+
+	token, err := e.UserTokenService.GetInfoByToken(req.Token)
+	if err != nil {
+		return err
+	}
+
+	if token == nil {
+		return nil
+	}
+
+	user, err := e.UserService.GetInfoByUserId(token.UserId)
+	if user == nil {
+		return nil
+	}
+
+	res.User = &userProto.UserInfo{
+		UserId:   int64(user.UserId),
+		UniqueId: user.UniqueId,
+		Nickname: user.Nickname,
+		Avatar:   user.Avatar,
+	}
+
+	return nil
+}
