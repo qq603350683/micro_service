@@ -2,15 +2,12 @@ package handler
 
 import (
 	"context"
-	"fmt"
-	"github.com/micro/go-micro/v2/registry"
-	"github.com/micro/go-plugins/registry/consul/v2"
-	"time"
+	"strconv"
 	"webApi/common"
+	"webApi/domain/service"
 	lotteryProto "webApi/proto/lottery"
+	userProto "webApi/proto/user"
 
-	//"github.com/golang/protobuf/proto"
-	"github.com/micro/go-micro/v2"
 	"net/http"
 	webApi "webApi/proto/webApi"
 	"webApi/response"
@@ -18,7 +15,7 @@ import (
 
 type WebApi struct{}
 
-var Service micro.Service
+//var Service micro.Service
 
 type LotteryResponse struct {
 	LotteryID int64
@@ -75,71 +72,67 @@ func (e *WebApi) AddLottery(ctx context.Context, req *webApi.Request, res *webAp
 		}
 	}
 
-	// 注册中心
-	consulRegistry :=  consul.NewRegistry(func(options *registry.Options) {
-		options.Addrs = []string{
-			"192.168.18.128:8500",
-		}
-	})
-
-	send := &lotteryProto.AddRequest{
+	params := &lotteryProto.AddRequest{
 		Name:    name,
 		BeginAt: beginAt,
 		EndAt:   endAt,
 	}
 
-	s := micro.NewService()
-	s.Init(micro.Registry(consulRegistry))
-	cli := s.Client()
+	cli := lotteryProto.NewLotteryService(service.ServiceLottery, service.GetClient())
 
-	// 这里很奇怪，好像没啥作用 time.Second * 30
-	opts := cli.Options()
-	opts.CallOptions.RequestTimeout = time.Second * 30
-	opts.CallOptions.DialTimeout = time.Second * 30
-
-	lotteryCli := lotteryProto.NewLotteryService("go.micro.service.lottery", cli)
-	lotteryRes, err := lotteryCli.Add(context.TODO(), send)
-
-	fmt.Println(lotteryRes)
-	fmt.Println(err)
+	lotteryRes, err := cli.Add(context.TODO(), params)
+	if err != nil {
+		return err
+	}
 
 	res.Body = response.New("success", http.StatusOK, lotteryRes).ToString()
 
 	return nil
-
-	//var lotteryRes lotteryProto.AddResponse
-
-	//opt := client.Option(func(options *client.Options) {
-	//	options.Registry = consulRegistry
-	//	options.ContentType = "application/grpc+proto"
-	//})
-	//
-	//c := client.NewClient(opt)
-	//
-	//send := lotteryProto.AddRequest{
-	//	Name:    "123123",
-	//	BeginAt: "2021-03-08",
-	//	EndAt:   "2021-03-18",
-	//}
-	//
-	//b, err := proto.Marshal(&send)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//lotteryReq := c.NewRequest("go.micro.service.lottery", "Lottery.Add", b)
-	//
-	//err = client.Call(context.TODO(), lotteryReq, lotteryRes)
-	//
-	//fmt.Println(err)
 }
 
 func (e *WebApi) GetLotteryList(ctx context.Context, req *webApi.Request, res *webApi.Response) error {
+	return nil
+}
 
+func (e *WebApi) GetInfoByUserId(ctx context.Context, req *webApi.Request, res *webApi.Response) error {
+	res.StatusCode = http.StatusOK
+
+	var ok bool
+	var err error
+	var userId int
+
+	if _, ok = req.Get["user_id"]; !ok {
+		res.Body = response.New("缺少user_id参数", http.StatusInternalServerError, nil).ToString()
+		return nil
+	} else {
+		str := req.Get["user_id"].Values[0]
+		userId, err = strconv.Atoi(str)
+		if err != nil {
+			return err
+		}
+	}
+
+	if userId == 0 {
+		return nil
+	}
+
+	params := &userProto.GetInfoByUserIdRequest{UserId:int64(userId)}
+
+	cli := userProto.NewUserService(service.ServiceUser, service.GetClient())
+
+	userRes, err := cli.GetInfoByUserId(context.TODO(), params)
+	if err != nil {
+		return err
+	}
+
+	if userRes == nil {
+		res.Body = response.New("success", http.StatusOK, nil).ToString()
+	} else {
+		res.Body = response.New("success", http.StatusOK, userRes.User).ToString()
+	}
 
 	return nil
 
-	//log.Info(req.Get[""])
 }
 
 

@@ -1,0 +1,5 @@
+package service
+
+func GetUserInfoByUserId() {
+
+}

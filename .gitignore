@@ -2,3 +2,9 @@
 /user/.idea
 /lottery/.idea
 /webApi/.idea
+/user/*.exe
+/lottery/*.exe
+/webApi/*.exe
+/user/*.zip
+/lottery/*.zip
+/webApi/*.zip

@@ -1,11 +1,12 @@
 // protoc --go_out=./proto/webApi/ --micro_out=./proto/webApi ./proto/webApi/webApi.proto
 syntax = "proto3";
 
-option go_package = ".;go.micro.api.webApi";
+option go_package = "./;go_micro_api_webApi";
 
 service WebApi {
 	rpc AddLottery(Request) returns (Response) {}
 	rpc GetLotteryList(Request) returns (Response) {}
+	rpc GetInfoByUserId(Request) returns (Response) {}
 }
 
 message Pair {

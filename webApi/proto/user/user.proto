@@ -1,0 +1,85 @@
+// protoc --go_out=./proto/user/ --micro_out=./proto/user --doc_out=./doc --doc_opt=html,index.html ./proto/user/user.proto
+
+syntax = "proto3";
+
+option go_package = "./;go_micro_service_user";
+
+service User {
+  // 根据 unique_id 获取用户详情
+	rpc GetInfoByUniqueId(GetInfoByUniqueIdRequest) returns (GetInfoByUniqueIdResponse) {}
+	// 根据 user_id 获取用户详情
+	rpc GetInfoByUserId(GetInfoByUserIdRequest) returns (GetInfoByUserIdResponse) {}
+	// 批量获取用户信息
+	rpc GetListByUserId(GetListByUserIdRequest) returns (GetListByUserIdResponse) {}
+	// 新增用户
+//	rpc Add(AddRequest) returns (AddResponse) {}
+	// 获取用户token令牌
+	rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {}
+	// 根据 token 获取用户详情
+	rpc GetUserInfoByToken(GetUserInfoByTokenRequest) returns (GetUserInfoByTokenResponse) {}
+}
+
+message BaseUser {
+    int64 user_id = 1; // 用户ID
+    string nickname = 2; // 昵称
+    string avatar = 3; // 头像
+}
+
+message UserInfo {
+    int64 user_id = 1; // 用户ID
+    string unique_id = 2; // 唯一标识符 unique_id
+    string nickname = 3; // 昵称
+    string avatar = 4; // 头像
+}
+
+message GetInfoByUniqueIdRequest {
+    string unique_id = 1; // 唯一标识符 unique_id
+}
+
+message GetInfoByUniqueIdResponse {
+    UserInfo user = 1; // 用户详情
+}
+
+message GetInfoByUserIdRequest {
+    int64 user_id = 1; // 用户ID
+}
+
+message GetInfoByUserIdResponse {
+    UserInfo user = 1; // 用户详情
+}
+
+message GetListByUserIdRequest {
+    repeated int64 user_ids = 1; // 用户ID数组
+}
+
+message GetListByUserIdResponse {
+    repeated BaseUser users = 1; // 用户详情数组
+}
+
+//message AddRequest {
+//    string unique_id = 1; // 唯一标识符 unique_id
+//    string nickname = 2; // 昵称
+//    string avatar = 3; // 头像
+//}
+
+//message AddResponse {
+//    int64 user_id = 1; // 用户ID
+//}
+
+message CreateTokenRequest {
+    int64 user_id = 1;  // 用户ID
+}
+
+message CreateTokenResponse {
+    string token = 2; // token令牌
+    string expired_at = 3; // 过期时间
+}
+
+message GetUserInfoByTokenRequest {
+    string token = 1; // token令牌
+}
+
+message GetUserInfoByTokenResponse {
+    UserInfo user = 1; // 用户详情
+}
+

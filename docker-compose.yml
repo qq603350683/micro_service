@@ -1,0 +1,24 @@
+# docker pull mlabouardy/hystrix-dashboard
+# docker run --name=hystrix -d -p 9002:9002 mlabouardy/hystrix-dashboard:latest
+# 
+
+version: "3"
+services: 
+  # 服务发现与配置中心
+  consul:
+    image: consul:latest
+    ports:
+      - "8500:8500"
+    volumes:
+      - "/consul/data:/consul/data"
+  # 链路追踪
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+  # 熔断器
+  hystrix-dashboard:
+    image: mlabouardy/hystrix-dashboard:latest
+    ports:
+      - "9002:9002"
