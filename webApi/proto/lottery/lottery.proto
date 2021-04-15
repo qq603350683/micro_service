@@ -1,0 +1,49 @@
+// protoc --go_out=./proto/lottery/ --micro_out=./proto/lottery ./proto/lottery/lottery.proto
+syntax = "proto3";
+
+option go_package = ".;go_micro_service_lottery";
+
+service Lottery {
+	rpc Add(AddRequest) returns (AddResponse) {}
+	rpc GetList(GetListRequest) returns (GetListResponse) {}
+//	rpc Draw(DrawReuqest) returns (DrawResponse) {}
+}
+
+message AddRequest {
+	string name = 1;
+	string begin_at = 2;
+	string end_at = 3;
+}
+
+message AddResponse {
+	int64 lottery_id = 1;
+}
+
+message GetListRequest {
+	int64 offset = 1;
+	int64 limit = 2;
+}
+
+message GetListResponse {
+	repeated Lotterys lotterys = 1;
+}
+
+message Lotterys {
+	int64 lottery_id = 1;
+	string name = 2;
+	int64 number_of_user = 3;
+	string begin_at = 4;
+	string end_at = 5;
+	bool is_join = 6;
+}
+
+//message DrawReuqest {
+//	int64 user_id = 1;
+//	int64 lottery_id = 2;
+//}
+//
+//message DrawResponse {
+//	bool is_success = 1;
+//}
+
+

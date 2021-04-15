@@ -26,6 +26,7 @@ require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
+	github.com/afex/hystrix-go v0.0.0-20180502004556-fa1af6a1f4f5
 	github.com/aokoli/goutils v1.1.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.5.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -34,6 +35,8 @@ require (
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/micro/go-micro v1.18.0
+	github.com/micro/go-plugins/wrapper/breaker/hystrix/v2 v2.9.1
+	github.com/micro/go-plugins/wrapper/ratelimiter/uber/v2 v2.9.1
 	github.com/mitchellh/copystructure v1.1.2 // indirect
 	github.com/mwitkow/go-proto-validators v0.3.2 // indirect
 	github.com/pseudomuto/protoc-gen-doc v1.4.1 // indirect

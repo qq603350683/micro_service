@@ -1,0 +1,2 @@
+# docker pull kennedyoliveira/hystrix-dashboard
+# docker run --name=hystrix -d -p 9002:9002 kennedyoliveira/hystrix-dashboard:latest

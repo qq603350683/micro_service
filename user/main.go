@@ -2,12 +2,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/afex/hystrix-go/hystrix"
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-plugins/registry/consul/v2"
+	microHystrix "github.com/micro/go-plugins/wrapper/breaker/hystrix/v2"
+	ratelimit "github.com/micro/go-plugins/wrapper/ratelimiter/uber/v2"
 	opentracing2 "github.com/micro/go-plugins/wrapper/trace/opentracing/v2"
 	"github.com/opentracing/opentracing-go"
+	"net"
+	"net/http"
 	"user/domain/cache"
 	"user/domain/config"
 	"user/domain/repository"
@@ -15,10 +20,9 @@ import (
 	userPro "user/proto/user"
 )
 
-var MicroServiceName string
-
 func main() {
-	MicroServiceName = "go.micro.service.user"
+	const MicroServiceName = "go.micro.service.user"
+	const QPS = 1000
 
 	consulConfigInfo := config.NewConsulConfig()
 	jaegerConfigInfo := config.NewJaegerConfig()
@@ -59,6 +63,17 @@ func main() {
 	defer io.Close()
 	opentracing.SetGlobalTracer(t)
 
+	// 熔断器
+	hystrixStreamHandler := hystrix.NewStreamHandler()
+	hystrixStreamHandler.Start()
+	// 启动端口
+	go func() {
+		err = http.ListenAndServe(net.JoinHostPort("0.0.0.0", "9096"), hystrixStreamHandler)
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
 	// New Service
 	service := micro.NewService(
 		micro.Name(MicroServiceName),
@@ -69,6 +84,10 @@ func main() {
 		micro.Registry(consulRegistry),
 		// 绑定链路追踪 opentracing2
 		micro.WrapHandler(opentracing2.NewHandlerWrapper(opentracing.GlobalTracer())),
+		//添加熔断
+		micro.WrapClient(microHystrix.NewClientWrapper()),
+		// 添加限流
+		micro.WrapClient(ratelimit.NewClientWrapper(QPS)),
 	)
 
 	// Initialise service
