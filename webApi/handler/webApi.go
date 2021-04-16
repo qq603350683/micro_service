@@ -135,40 +135,122 @@ func (e *WebApi) GetInfoByUserId(ctx context.Context, req *webApi.Request, res *
 
 }
 
+func (e *WebApi) GetListByUserId(ctx context.Context, req *webApi.Request, res *webApi.Response) error {
+	var ok bool
+	var userIds []int64
 
-// Call is a single request handler called via client.Call or the generated client code
-//func (e *WebApi) Call(ctx context.Context, req *webApi.Request, rsp *webApi.Response) error {
-//	log.Info("Received WebApi.Call request")
-//	rsp.Msg = "Hello " + req.Name
-//	return nil
-//}
+	if _, ok = req.Post["user_ids"]; !ok {
+		res.Body = response.New("缺少user_ids参数", http.StatusInternalServerError, nil, "缺少user_ids参数").ToString()
+		return nil
+	}
 
-// Stream is a server side stream handler called via client.Stream or the generated client code
-//func (e *WebApi) Stream(ctx context.Context, req *webApi.StreamingRequest, stream webApi.WebApi_StreamStream) error {
-//	log.Infof("Received WebApi.Stream request with count: %d", req.Count)
-//
-//	for i := 0; i < int(req.Count); i++ {
-//		log.Infof("Responding: %d", i)
-//		if err := stream.Send(&webApi.StreamingResponse{
-//			Count: int64(i),
-//		}); err != nil {
-//			return err
-//		}
-//	}
-//
-//	return nil
-//}
+	if len(req.Post["user_ids"].Values) == 0 {
+		res.Body = response.New("user_ids 不能是空数组", http.StatusInternalServerError, nil, "user_ids 不能是空数组").ToString()
+		return nil
+	}
 
-// PingPong is a bidirectional stream handler called via client.Stream or the generated client code
-//func (e *WebApi) PingPong(ctx context.Context, stream webApi.WebApi_PingPongStream) error {
-//	for {
-//		req, err := stream.Recv()
-//		if err != nil {
-//			return err
-//		}
-//		log.Infof("Got ping %v", req.Stroke)
-//		if err := stream.Send(&webApi.Pong{Stroke: req.Stroke}); err != nil {
-//			return err
-//		}
-//	}
-//}
+	for _, value := range(req.Post["user_ids"].Values) {
+		userId, err := strconv.Atoi(value)
+		if err != nil {
+			return err
+		}
+
+		userIds = append(userIds, int64(userId))
+	}
+
+	params := &userProto.GetListByUserIdRequest{UserIds:userIds}
+
+	cli := userProto.NewUserService(service.ServiceUser, service.GetClient())
+
+	list, err := cli.GetListByUserId(context.TODO(), params)
+	if err != nil {
+		return err
+	}
+
+	if list == nil {
+		res.Body = response.New("success", http.StatusOK, nil).ToString()
+	} else {
+		res.Body = response.New("success", http.StatusOK, list.Users).ToString()
+	}
+
+	return nil
+}
+
+func (e *WebApi) Login(ctx context.Context, req *webApi.Request, res *webApi.Response) error {
+	var ok bool
+	var uniqueId string
+	
+	if _, ok = req.Post["unique_id"]; !ok {
+		res.Body = response.New("请输入账户", http.StatusInternalServerError, nil, "缺少unique_id参数").ToString()
+		return nil
+	}
+
+	uniqueId = req.Post["unique_id"].Values[0]
+	if uniqueId == "" {
+		res.Body = response.New("请输入账户", http.StatusInternalServerError, nil, "账户不能为空").ToString()
+		return nil
+	}
+
+	params := &userProto.GetInfoByUniqueIdRequest{UniqueId:uniqueId}
+
+	cli := userProto.NewUserService(service.ServiceUser, service.GetClient())
+
+	resp, err := cli.GetInfoByUniqueId(context.TODO(), params)
+	if err != nil {
+		return err
+	}
+
+	if resp == nil {
+		res.Body = response.New("账户错误", http.StatusInternalServerError, nil).ToString()
+		return nil
+	}
+
+	if resp.User == nil {
+		res.Body = response.New("账户错误", http.StatusInternalServerError, nil).ToString()
+		return nil
+	}
+
+	param1 := &userProto.CreateTokenRequest{UserId:int64(resp.User.UserId)}
+
+	resp1, err := cli.CreateToken(context.TODO(), param1)
+	if err != nil {
+		return err
+	}
+
+	res.Body = response.New("账户错误", http.StatusInternalServerError, resp1).ToString()
+
+	return nil
+}
+
+func (e *WebApi) Register(ctx context.Context, req *webApi.Request, res *webApi.Response) error {
+	var ok bool
+	var uniqueId string
+
+	if _, ok = req.Post["unique_id"]; !ok {
+		res.Body = response.New("请输入账户", http.StatusInternalServerError, nil, "缺少unique_id参数").ToString()
+		return nil
+	}
+
+	uniqueId = req.Post["unique_id"].Values[0]
+	if uniqueId == "" {
+		res.Body = response.New("请输入账户", http.StatusInternalServerError, nil, "账户不能为空").ToString()
+		return nil
+	}
+
+	param := &userProto.GetInfoByUniqueIdRequest{UniqueId:uniqueId}
+
+	cli := userProto.NewUserService(service.ServiceUser, service.GetClient())
+
+	resp, err := cli.GetInfoByUniqueId(context.TODO(), param)
+	if err != nil {
+		return err
+	}
+
+	if resp != nil && resp.User != nil {
+		res.Body = response.New("当前账户已被注册", http.StatusInternalServerError, nil).ToString()
+		return nil
+	}
+
+	return nil
+	//param1 := &userProto.A
+}

@@ -7,6 +7,9 @@ service WebApi {
 	rpc AddLottery(Request) returns (Response) {}
 	rpc GetLotteryList(Request) returns (Response) {}
 	rpc GetInfoByUserId(Request) returns (Response) {}
+	rpc GetListByUserId(Request) returns (Response) {}
+	rpc Login(Request) returns (Response) {}
+	rpc Register(Request) returns (Response) {}
 }
 
 message Pair {
