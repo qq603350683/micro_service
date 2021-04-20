@@ -12,7 +12,7 @@ service User {
 	// 批量获取用户信息
 	rpc GetListByUserId(GetListByUserIdRequest) returns (GetListByUserIdResponse) {}
 	// 新增用户
-//	rpc Add(AddRequest) returns (AddResponse) {}
+	rpc AddUser(AddUserRequest) returns (AddUserResponse) {}
 	// 获取用户token令牌
 	rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {}
 	// 根据 token 获取用户详情
@@ -56,15 +56,15 @@ message GetListByUserIdResponse {
     repeated BaseUser users = 1; // 用户详情数组
 }
 
-//message AddRequest {
-//    string unique_id = 1; // 唯一标识符 unique_id
-//    string nickname = 2; // 昵称
-//    string avatar = 3; // 头像
-//}
+message AddUserRequest {
+    string unique_id = 1; // 唯一标识符 unique_id
+    string nickname = 2; // 昵称
+    string avatar = 3; // 头像
+}
 
-//message AddResponse {
-//    int64 user_id = 1; // 用户ID
-//}
+message AddUserResponse {
+    int64 user_id = 1; // 用户ID
+}
 
 message CreateTokenRequest {
     int64 user_id = 1;  // 用户ID

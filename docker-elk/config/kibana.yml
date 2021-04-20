@@ -1,0 +1,8 @@
+---
+server.name: kibana
+server.host: 0.0.0.0
+elasticsearch.hosts: ["http://192.168.18.128:9200"] 
+monitoring.ui.container.elasticsearch.enabled: true
+
+elasticsearch.username: luo
+elasticsearch.password: luo123456

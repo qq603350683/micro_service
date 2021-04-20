@@ -41,10 +41,12 @@ require (
 	github.com/mwitkow/go-proto-validators v0.3.2 // indirect
 	github.com/pseudomuto/protoc-gen-doc v1.4.1 // indirect
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
+	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
 	google.golang.org/genproto v0.0.0-20210406143921-e86de6bf7a46 // indirect
 	// github.com/prometheus/common v0.6.0
 	// github.com/joho/godotenv v1.3.0 // indirect
 	// github.com/prometheus/common v0.6.0
 	google.golang.org/protobuf v1.26.0
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )

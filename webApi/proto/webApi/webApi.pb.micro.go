@@ -45,6 +45,9 @@ type WebApiService interface {
 	AddLottery(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	GetLotteryList(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	GetInfoByUserId(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	GetListByUserId(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	Login(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	Register(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 }
 
 type webApiService struct {
@@ -89,12 +92,45 @@ func (c *webApiService) GetInfoByUserId(ctx context.Context, in *Request, opts .
 	return out, nil
 }
 
+func (c *webApiService) GetListByUserId(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "WebApi.GetListByUserId", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *webApiService) Login(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "WebApi.Login", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *webApiService) Register(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "WebApi.Register", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for WebApi service
 
 type WebApiHandler interface {
 	AddLottery(context.Context, *Request, *Response) error
 	GetLotteryList(context.Context, *Request, *Response) error
 	GetInfoByUserId(context.Context, *Request, *Response) error
+	GetListByUserId(context.Context, *Request, *Response) error
+	Login(context.Context, *Request, *Response) error
+	Register(context.Context, *Request, *Response) error
 }
 
 func RegisterWebApiHandler(s server.Server, hdlr WebApiHandler, opts ...server.HandlerOption) error {
@@ -102,6 +138,9 @@ func RegisterWebApiHandler(s server.Server, hdlr WebApiHandler, opts ...server.H
 		AddLottery(ctx context.Context, in *Request, out *Response) error
 		GetLotteryList(ctx context.Context, in *Request, out *Response) error
 		GetInfoByUserId(ctx context.Context, in *Request, out *Response) error
+		GetListByUserId(ctx context.Context, in *Request, out *Response) error
+		Login(ctx context.Context, in *Request, out *Response) error
+		Register(ctx context.Context, in *Request, out *Response) error
 	}
 	type WebApi struct {
 		webApi
@@ -124,4 +163,16 @@ func (h *webApiHandler) GetLotteryList(ctx context.Context, in *Request, out *Re
 
 func (h *webApiHandler) GetInfoByUserId(ctx context.Context, in *Request, out *Response) error {
 	return h.WebApiHandler.GetInfoByUserId(ctx, in, out)
+}
+
+func (h *webApiHandler) GetListByUserId(ctx context.Context, in *Request, out *Response) error {
+	return h.WebApiHandler.GetListByUserId(ctx, in, out)
+}
+
+func (h *webApiHandler) Login(ctx context.Context, in *Request, out *Response) error {
+	return h.WebApiHandler.Login(ctx, in, out)
+}
+
+func (h *webApiHandler) Register(ctx context.Context, in *Request, out *Response) error {
+	return h.WebApiHandler.Register(ctx, in, out)
 }

@@ -23,9 +23,11 @@ require (
 	github.com/prometheus/common v0.6.0
 	github.com/qq603350683/micro_service v0.0.0-20210415094550-411582d251ec // indirect
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
+	go.uber.org/zap v1.16.0
 	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
 	// github.com/prometheus/common v0.6.0
 	// github.com/joho/godotenv v1.3.0 // indirect
 	// github.com/prometheus/common v0.6.0
 	google.golang.org/protobuf v1.22.0
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )

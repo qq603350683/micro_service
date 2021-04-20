@@ -49,7 +49,7 @@ type UserService interface {
 	// 批量获取用户信息
 	GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, opts ...client.CallOption) (*GetListByUserIdResponse, error)
 	// 新增用户
-	Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*AddResponse, error)
+	AddUser(ctx context.Context, in *AddUserRequest, opts ...client.CallOption) (*AddUserResponse, error)
 	// 获取用户token令牌
 	CreateToken(ctx context.Context, in *CreateTokenRequest, opts ...client.CallOption) (*CreateTokenResponse, error)
 	// 根据 token 获取用户详情
@@ -98,9 +98,9 @@ func (c *userService) GetListByUserId(ctx context.Context, in *GetListByUserIdRe
 	return out, nil
 }
 
-func (c *userService) Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*AddResponse, error) {
-	req := c.c.NewRequest(c.name, "User.Add", in)
-	out := new(AddResponse)
+func (c *userService) AddUser(ctx context.Context, in *AddUserRequest, opts ...client.CallOption) (*AddUserResponse, error) {
+	req := c.c.NewRequest(c.name, "User.AddUser", in)
+	out := new(AddUserResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -138,7 +138,7 @@ type UserHandler interface {
 	// 批量获取用户信息
 	GetListByUserId(context.Context, *GetListByUserIdRequest, *GetListByUserIdResponse) error
 	// 新增用户
-	Add(context.Context, *AddRequest, *AddResponse) error
+	AddUser(context.Context, *AddUserRequest, *AddUserResponse) error
 	// 获取用户token令牌
 	CreateToken(context.Context, *CreateTokenRequest, *CreateTokenResponse) error
 	// 根据 token 获取用户详情
@@ -150,7 +150,7 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		GetInfoByUniqueId(ctx context.Context, in *GetInfoByUniqueIdRequest, out *GetInfoByUniqueIdResponse) error
 		GetInfoByUserId(ctx context.Context, in *GetInfoByUserIdRequest, out *GetInfoByUserIdResponse) error
 		GetListByUserId(ctx context.Context, in *GetListByUserIdRequest, out *GetListByUserIdResponse) error
-		Add(ctx context.Context, in *AddRequest, out *AddResponse) error
+		AddUser(ctx context.Context, in *AddUserRequest, out *AddUserResponse) error
 		CreateToken(ctx context.Context, in *CreateTokenRequest, out *CreateTokenResponse) error
 		GetUserInfoByToken(ctx context.Context, in *GetUserInfoByTokenRequest, out *GetUserInfoByTokenResponse) error
 	}
@@ -177,8 +177,8 @@ func (h *userHandler) GetListByUserId(ctx context.Context, in *GetListByUserIdRe
 	return h.UserHandler.GetListByUserId(ctx, in, out)
 }
 
-func (h *userHandler) Add(ctx context.Context, in *AddRequest, out *AddResponse) error {
-	return h.UserHandler.Add(ctx, in, out)
+func (h *userHandler) AddUser(ctx context.Context, in *AddUserRequest, out *AddUserResponse) error {
+	return h.UserHandler.AddUser(ctx, in, out)
 }
 
 func (h *userHandler) CreateToken(ctx context.Context, in *CreateTokenRequest, out *CreateTokenResponse) error {

@@ -1,0 +1,8 @@
+# 机器名称
+cluster.name: "luo-cluster"
+# 网络
+network.host: 0.0.0.0
+
+xpack.license.self_generated.type: trail
+xpack.security.enabled: true
+xpack.monitoring.collection.enabled: true

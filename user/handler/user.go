@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"user/domain/common"
 	"user/domain/model"
 	"user/domain/service"
 	userProto "user/proto/user"
@@ -23,7 +24,7 @@ func NewUser() *User {
 }
 
 // 添加用户详情
-func (e *User) Add(ctx context.Context, req *userProto.AddRequest, res *userProto.AddResponse) error {
+func (e *User) AddUser(ctx context.Context, req *userProto.AddUserRequest, res *userProto.AddUserResponse) error {
 	var err error
 
 	if req.UniqueId == "" {
@@ -53,6 +54,8 @@ func (e *User) GetInfoByUserId(ctx context.Context, req *userProto.GetInfoByUser
 	if req.UserId == 0 {
 		return errors.New("user_id cannot be 0")
 	}
+
+	common.Infof("GetInfoByUserId(%d)", req.UserId)
 
 	userId := int(req.UserId)
 

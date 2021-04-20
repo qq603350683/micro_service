@@ -8,3 +8,6 @@
 /user/*.zip
 /lottery/*.zip
 /webApi/*.zip
+/user/*.log
+/lottery/*.log
+/webApi/*.log

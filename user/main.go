@@ -14,6 +14,7 @@ import (
 	"net"
 	"net/http"
 	"user/domain/cache"
+	"user/domain/common"
 	"user/domain/config"
 	"user/domain/repository"
 	"user/handler"
@@ -105,6 +106,8 @@ func main() {
 	//micro.RegisterSubscriber("go.micro.srv.user", service.Server(), subscriber.Handler)
 
 	// Run service
+	common.Info("micro service:[" + MicroServiceName + "] success start")
+
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}

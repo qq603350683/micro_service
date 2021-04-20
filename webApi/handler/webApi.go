@@ -126,8 +126,10 @@ func (e *WebApi) GetInfoByUserId(ctx context.Context, req *webApi.Request, res *
 	}
 
 	if userRes == nil {
+		common.Infof("GetInfoByUserId(%d) is nil", userId)
 		res.Body = response.New("success", http.StatusOK, nil).ToString()
 	} else {
+		common.Info(userRes.User)
 		res.Body = response.New("success", http.StatusOK, userRes.User).ToString()
 	}
 
