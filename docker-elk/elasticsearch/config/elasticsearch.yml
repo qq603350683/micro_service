@@ -1,5 +1,5 @@
 # 机器名称
-cluster.name: "luo-cluster"
+cluster.name: "docker-cluster"
 # 网络
 network.host: 0.0.0.0
 

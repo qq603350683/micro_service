@@ -2,5 +2,5 @@ http.host: "0.0.0.0"
 xpack.monitoring.elasticsearch.hosts: ["http://192.168.18.128:9200"]
 
 xpack.monitoring.enabled: true
-xpack.monitoring.elasticsearch.username: luo
+xpack.monitoring.elasticsearch.username: elastic
 xpack.monitoring.elasticsearch.password: luo123456
