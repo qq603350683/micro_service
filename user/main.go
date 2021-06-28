@@ -22,6 +22,8 @@ import (
 )
 
 func main() {
+	// testing CI and CD
+
 	const MicroServiceName = "go.micro.service.user"
 	const QPS = 1000
 
