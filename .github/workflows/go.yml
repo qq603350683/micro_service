@@ -19,7 +19,7 @@ jobs:
         go-version: 1.13
 
     - name: Build
-      run: cd user && go build -v ./..
+      run: cd user; go build -v ./..
 
     - name: Test
       run: go test -v ./...
