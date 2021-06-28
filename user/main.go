@@ -23,7 +23,7 @@ import (
 
 func main() {
 	const MicroServiceName = "go.micro.service.user"
-	const QPS = 3000
+	const QPS = 1000
 
 	consulConfigInfo := config.NewConsulConfig()
 	jaegerConfigInfo := config.NewJaegerConfig()
