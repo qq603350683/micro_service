@@ -1,0 +1,109 @@
+// protoc --go_out=./proto/product/ --micro_out=./proto/product --doc_out=./doc --doc_opt=html,index.html ./proto/product/product.proto
+syntax = "proto3";
+
+option go_package = "./;go_micro_service_product";
+
+service Product {
+	// 发布一个产品
+	rpc AddProduct(AddProductReq) returns (AddProductRes) {}
+	// 删除发布产品
+	rpc DeleteProduct(DeleteProductReq) returns (DeleteProductRes) {}
+	// 申请交换产品
+	rpc ApplyExchangeProduct(ApplyExchangeProductReq) returns (ApplyExchangeProductRes) {}
+	// 同意/拒绝交换产品
+	rpc HandleApplyExchangeProduct(HandleApplyExchangeProductReq) returns (HandleApplyExchangeProductRes) {}
+	// 获取产品详情
+	rpc GetProduct(GetProductReq) returns (GetProductRes) {}
+	// 获取产品列表
+	rpc GetProducts(GetProductsReq) returns (GetProductsRes) {}
+}
+
+message AddProductReq {
+	int64 user_id = 1; // 用户ID 【required】
+	bool is_specify_city = 2;  // 是否指定城市 【default false】
+	string city = 3;   // 指定城市名称 【max 10】
+	string my_product = 4;  // 我发布的产品 【required; max 50】
+	string want_product = 5;  // 想要交换的产品 【max 50】
+	repeated ProductImages product_images = 6;   // 图片 【required; max 5】
+}
+
+message AddProductRes {
+	int64 product_id = 1;  // 产品ID
+}
+
+message DeleteProductReq {
+	int64 product_id = 1;  // 产品ID 【required】
+}
+
+message DeleteProductRes {
+	bool is_ok = 1;  // 是否成功删除
+}
+
+message ApplyExchangeProductReq {
+	int64 product_id = 1; // 产品ID 【required】
+	int64 apply_exchange_user_id = 2; // 申请交换产品的用户ID 【required】
+}
+
+message ApplyExchangeProductRes {
+	bool is_ok = 1;  // 是否成功申请
+}
+
+message HandleApplyExchangeProductReq {
+	int64 product_id = 1; // 产品ID 【required】
+	bool is_agree = 2; // 是否同意交换产品 【required】
+}
+
+message HandleApplyExchangeProductRes {
+	bool is_ok = 1;  // 是否成功处理交换产品
+}
+
+message GetProductReq {
+	int64 product_id = 1; // 产品ID 【required】
+}
+
+message GetProductRes {
+	int64 product_id = 1; // 产品ID
+	int64 user_id = 2; // 用户ID
+	string avatar = 3; // 用户头像
+	string nickname = 4; // 用户昵称
+	bool is_specify_city = 5;  // 是否指定城市
+	string city = 6;   // 指定城市名称
+	string my_product = 7;  // 我发布的产品
+	string want_product = 8;  // 想要交换的产品
+	int64 successfully_exchange_user_id = 9; // 成功交换产品的用户ID
+	int32 status = 10; // 状态 0 - 待交换 1 - 已交换成功
+	repeated ApplyExchangeUsers apply_exchange_users = 11; // 申请交换
+	repeated ProductImages product_images = 12;   // 图片
+}
+
+message GetProductsReq {
+	int64 offset = 1;  // 从第几个开始获取 【required】
+	int64 limit = 2;  // 获取多少个 【required】
+}
+
+message GetProductsRes {
+	repeated ProductBaseInfo product_base_info = 1; // 产品列表
+}
+
+message ProductImages {
+	string thumb = 1; // 缩略图
+	string center = 2; // 居中图
+	string original = 3;  // 原图
+}
+
+message ApplyExchangeUsers {
+	int64 apply_exchange_users_id = 1; // 申请交换ID
+	int64 user_id = 2;  // 用户ID
+	string avatar = 3;  // 头像
+	string nickname = 4; // 昵称
+	string applied_prodcut = 5; // 申请产品
+	string applied_at = 6; // 申请时间
+	bool status = 7; // 是否同意交换产品
+}
+
+message ProductBaseInfo {
+	int64 product_id = 1; // 产品ID
+	string center_image = 2; // 产品图片
+	string my_product = 3;  // 我发布的产品
+	string want_product = 4;  // 想要交换的产品
+}
